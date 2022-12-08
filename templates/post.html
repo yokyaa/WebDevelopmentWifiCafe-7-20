@@ -1,0 +1,106 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('{{cafe.img_url}}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
+
+                    <h1>{{cafe.name}}</h1>
+                    <h2 class="subheading">{{cafe.location}}</h2>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                {{ cafe.body|safe }}
+                <hr>
+                {% if current_user.id == 1 %}
+                <div class="clearfix">
+                </div>
+
+                {% endif %}
+
+
+            </div>
+        </div>
+        <div class="container-fluid mx-auto ">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <h2 class="tech">Technically</h2>
+                    <h4>Is there Wi-Fi? : {{ cafe.has_wifi }}</h4>
+                    <h4>Is there power sockets? : {{ cafe.has_sockets }}</h4>
+                    <h4>Can you make calls? : {{ cafe.has_wifi }}</h4>
+                    <hr>
+                    <h2 class="serv">Service</h2>
+                    <h4>Is place has Toilets? : {{ cafe.has_toilets }}</h4>
+                    <h4>How many seats is there? :{{cafe.seats}}</h4>
+                    <h4>What is the coffee price?: £{{ cafe.coffee_price }}</h4>
+
+                </div>
+                <div class="col-lg-6 mx-auto">
+                    <a href="{{ cafe.map_url }}"><i class="fa-solid fa-location-dot"></i> {{cafe.name}}</a>
+
+
+                    <p class="closing_time"> Mon 08:30 – 16:00</p>
+                    <p class="closing_time"> Tue 08:30 – 16:30</p>
+                    <p class="closing_time"> Wed 08:30 – 16:30</p>
+                    <p class="closing_time"> Thu 08:30 – 16:30</p>
+                    <p class="closing_time"> Fri 08:30 – 15:00</p>
+                    <p class="closing_time"> Sat Closed</p>
+                    <p class="closing_time"> Sun Closed</p>
+
+                    <hr>
+                    <h3>Missing or incorrect information?</h3>
+                    <div class="clearfix">
+
+                        <a class="btn btn-secondary " href="{{url_for('edit_cafe', cafe_id=cafe.id)}}"> Update Page </a>
+                    </div>
+
+                </div>
+<!--              3-->
+                {{ ckeditor.load() }}
+                {{ ckeditor.config(name='comment_text') }}
+                {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "secondary"}) }}
+
+                <div class="col-lg-8 col-md-6 mx-auto comment">
+                    {% for review in cafe.reviews: %}
+                    <ul class="commentList">
+                        <li>
+
+                            <div class="commenterImage">
+                                <img src="{{review.review_author.email | gravatar }}">
+
+                            </div>
+                            <div class="commentText">
+                                {{review.text|safe}}
+                                <span class="date sub-text">{{review.review_author.name }}</span>
+
+
+
+                            </div>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+</div>
+        </div>
+</article>
+
+<hr>
+{% include "footer.html" %}
